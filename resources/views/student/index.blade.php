@@ -1,49 +1,52 @@
 @extends('layouts.app')
 
 @section('content')
-
-<!-- Modal -->
-<div class="modal fade" id="AddStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+main
+{{-- Add Modal --}}
+<div class="modal fade" id="AddStudentModal" tabindex="-1" aria-labelledby="AddStudentModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddStudentModalLabel">Add Student Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
 
-          <div class="form-group mb-3">
-              <label for="">Student Name</label>
-              <input type="text" class="name form-control">
-          </div>
-          <div class="form-group mb-3">
-              <label for="">Email</label>
-              <input type="text" class="email form-control">
-          </div>
-          <div class="form-group mb-3">
-              <label for="">Phone</label>
-              <input type="text" class="phone form-control">
-          </div>
-          <div class="form-group mb-3">
-              <label for="">Course</label>
-              <input type="text" class="phone form-control">
-          </div>
-</div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary add_student">Save</button>
+                <ul id="save_msgList"></ul>
+
+                <div class="form-group mb-3">
+                    <label for="">Name</label>
+                    <input type="text" required class="name form-control">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="">Course</label>
+                    <input type="text" required class="course form-control">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="">Email</label>
+                    <input type="text" required class="email form-control">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="">Phone No</label>
+                    <input type="text" required class="phone form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary add_student">Save</button>
+            </div>
+
         </div>
-      </div>
     </div>
-  </div>
-
-  <!-- End-Modal -->
+</div>
 
 
-
-   <div class="container py-5">
+ <div class="container py-5">
 <div class="row">
     <div class="col-md-12">
+
+      <div id="succes_message"> </div>
+
         <div class="card">
             <div class="card-header">
                 <h4> Students Data
@@ -67,8 +70,6 @@ $(document).ready(function(){
  $(document).on('click', '.add_student',function(e){
 e.preventDefault();
 
-
-
 var data = {
     'name' : $('.name').val(),
     'email' : $('.email').val(),
@@ -76,6 +77,7 @@ var data = {
     'course' : $('.course').val(),
 }
 //console.log(data);
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -107,16 +109,10 @@ var data = {
                     }
                 }
             });
-
-        });
-
-
- });
+});
 });
 
+
 </script> 
-
-
-
 
 @endsection
