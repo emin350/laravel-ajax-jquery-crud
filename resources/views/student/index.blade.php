@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-main
+
 {{-- Add Modal --}}
 <div class="modal fade" id="AddStudentModal" tabindex="-1" aria-labelledby="AddStudentModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -54,6 +54,22 @@ main
                 </h4>
             </div>
             <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Course</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
 
             </div>
         </div>
@@ -66,6 +82,30 @@ main
 
 <script> 
 $(document).ready(function(){
+
+  fetchstudent()
+    function fetchstudent(){
+        $.ajax({
+                type: "GET",
+                url: "/fetch-students",
+                dataType: "json",
+                success: function (response) { 
+                    //console.log(response.students)
+                    $('tbody').html("");
+                    $.each(response.students, function (key, item) {
+                        $('tbody').append('<tr>\
+                            <td>' + item.id + '</td>\
+                            <td>' + item.name + '</td>\
+                            <td>' + item.course + '</td>\
+                            <td>' + item.email + '</td>\
+                            <td>' + item.phone + '</td>\
+                            <td><button type="button" value="' + item.id + '" class="btn btn-primary editbtn btn-sm">Edit</button></td>\
+                            <td><button type="button" value="' + item.id + '" class="btn btn-danger deletebtn btn-sm">Delete</button></td>\
+                        \</tr>');
+                    });
+                }    
+            });
+    }
     
  $(document).on('click', '.add_student',function(e){
 e.preventDefault();
