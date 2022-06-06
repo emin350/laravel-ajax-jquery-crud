@@ -99,7 +99,7 @@ $(document).ready(function(){
                             <td>' + item.course + '</td>\
                             <td>' + item.email + '</td>\
                             <td>' + item.phone + '</td>\
-                            <td><button type="button" value="' + item.id + '" class="btn btn-primary editbtn btn-sm">Edit</button></td>\
+                            <td><button type="button" value="' + item.id + '" class="edit_student btn btn-primary  btn-sm">Edit</button></td>\
                             <td><button type="button" value="' + item.id + '" class="btn btn-danger deletebtn btn-sm">Delete</button></td>\
                         \</tr>');
                     });
@@ -107,9 +107,17 @@ $(document).ready(function(){
             });
     }
     
+$(document).on('click','.edit_student', function (e) {
+    e.preventDefault();
+    var stud_id = $(this).val();
+    console.log(stud_id);
+
+
+});
+
+
  $(document).on('click', '.add_student',function(e){
 e.preventDefault();
-
 var data = {
     'name' : $('.name').val(),
     'email' : $('.email').val(),
