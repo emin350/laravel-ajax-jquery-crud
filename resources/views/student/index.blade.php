@@ -40,6 +40,47 @@
     </div>
 </div>
 
+{{-- Edit Student Modal --}}
+<div class="modal fade" id="EditStudentModal" tabindex="-1" aria-labelledby="AddStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddStudentModalLabel">Edit Student Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <ul id="updateform_errList"> </ul>
+                <input type="hidden" id="edit_stud_id">
+
+                <div class="form-group mb-3">
+                    <label for="">Name</label>
+                    <input type="text" id="edit_name" class="name form-control">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="">Course</label>
+                    <input type="text" id="edit_course" class="course form-control">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="">Email</label>
+                    <input type="text" id="edit_email" class="email form-control">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="">Phone No</label>
+                    <input type="text" id="edit_phone" class="phone form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary update_student">Update</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{{-- Edit Student Modal --}}
+
 
  <div class="container py-5">
 <div class="row">
@@ -107,12 +148,31 @@ $(document).ready(function(){
             });
     }
     
+// EDİT STUDENT
+
 $(document).on('click','.edit_student', function (e) {
     e.preventDefault();
     var stud_id = $(this).val();
-    console.log(stud_id);
-
-
+   //console.log(stud_id);
+   $('#EditStudentModal').modal("show");
+               $.ajax({
+                type: "GET",
+                url: "/edit-student/"+stud_id,
+                success: function (response) { 
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#editModal').modal('hide');
+                    } else {
+                        // console.log(response.student.name);
+                        $('#edit_name').val(response.student.name);
+                        $('#edit_course').val(response.student.course);
+                        $('#edit_email').val(response.student.email);
+                        $('#edit_phone').val(response.student.phone);
+                        $('#edit_stud_id').val(stud_id);
+                    }
+                }
+         });
 });
 
 
@@ -131,6 +191,8 @@ var data = {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+ //ADD STUDENT//
 
               $.ajax({
                 type: "POST",
