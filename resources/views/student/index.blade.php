@@ -81,6 +81,32 @@
 
 {{-- Edit Student Modal --}}
 
+{{-- Start-Delete Student Modal --}}
+<div class="modal fade" id="DeleteStudentModal" tabindex="-1" aria-labelledby="AddStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddStudentModalLabel"> Delete Student Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+               
+                <input type="hidden" id="delete_stud_id">
+                 Emin misiniz ?
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary delete_student_btn">Delete</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{{--END Delete Student Modal --}}
+
 
  <div class="container py-5">
 <div class="row">
@@ -124,6 +150,7 @@
 <script> 
 $(document).ready(function(){
 
+    
   fetchstudent()
     function fetchstudent(){
         $.ajax({
@@ -141,7 +168,7 @@ $(document).ready(function(){
                             <td>' + item.email + '</td>\
                             <td>' + item.phone + '</td>\
                             <td><button type="button" value="' + item.id + '" class="edit_student btn btn-primary  btn-sm">Edit</button></td>\
-                            <td><button type="button" value="' + item.id + '" class="btn btn-danger deletebtn btn-sm">Delete</button></td>\
+                            <td><button type="button" value="' + item.id + '" class="delete_student btn btn-danger  btn-sm">Delete</button></td>\
                         \</tr>');
                     });
                 }    
@@ -162,7 +189,7 @@ $(document).on('click','.edit_student', function (e) {
                     if (response.status == 404) {
                         $('#success_message').addClass('alert alert-success');
                         $('#success_message').text(response.message);
-                        $('#editModal').modal('hide');
+                        $('#EditStudentModal').modal('hide');
                     } else {
                         // console.log(response.student.name);
                         $('#edit_name').val(response.student.name);
@@ -218,7 +245,7 @@ $(document).on('click', '.update_student', function (e) {
                         $('#success_message').text(response.message);
                         $('#editModal').find('input').val('');
                         $('.update_student').text('Update');
-                        $('#editModal').modal('hide');
+                        $('#EditStudentModal').modal('hide');
                         fetchstudent();
                     }
                 }
@@ -236,6 +263,7 @@ var data = {
     'course' : $('.course').val(),
 }
 //console.log(data);
+
 
             $.ajaxSetup({
                 headers: {
@@ -271,7 +299,55 @@ var data = {
                 }
             });
 });
+
+
+// Delete STUDENT
+$(document).on('click', '.delete_student', function (e) {
+            e.preventDefault();
+            var stud_id = $(this).val();
+          $('#delete_stud_id').val(stud_id);
+             $('#DeleteStudentModal').modal('show');
+        });
+
+        $(document).on('click', '.delete_student_btn', function (e) {
+            e.preventDefault();
+
+            $(this).text('Deleting..');
+            var stud_id = $('#delete_stud_id').val();
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "DELETE",
+                url: "/delete-student/"+stud_id,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 404) {
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_student').text('Yes Delete');
+                    } else {
+                        $('#success_message').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('.delete_student_btn').text('Yes Delete');
+                        $('#DeleteStudentModal').modal('hide');
+                        fetchstudent();
+                    }
+                }
+            });
+        });
+
+
+
+
 });
+
 
 
 </script> 
