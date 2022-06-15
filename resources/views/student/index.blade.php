@@ -175,6 +175,57 @@ $(document).on('click','.edit_student', function (e) {
          });
 });
 
+// UPDATE STUDENT
+$(document).on('click', '.update_student', function (e) {
+            e.preventDefault();
+
+            $(this).text('Updating..');
+            var stud_id = $('#edit_stud_id').val();
+            // alert(id);
+
+            var data = {
+                'name': $('#edit_name').val(),
+                'course': $('#edit_course').val(),
+                'email': $('#edit_email').val(),
+                'phone': $('#edit_phone').val(),
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "PUT",
+                url: "/update-student/"+stud_id,
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 400) {
+                        $('#update_msgList').html("");
+                        $('#update_msgList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_value) {
+                            $('#update_msgList').append('<li>' + err_value +
+                                '</li>');
+                        });
+                        $('.update_student').text('Update');
+                    } else {
+                        $('#update_msgList').html("");
+
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#editModal').find('input').val('');
+                        $('.update_student').text('Update');
+                        $('#editModal').modal('hide');
+                        fetchstudent();
+                    }
+                }
+            });
+
+        });
+
 
  $(document).on('click', '.add_student',function(e){
 e.preventDefault();
